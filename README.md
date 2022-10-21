@@ -1,9 +1,9 @@
 # think-captcha
 
-thinkphp6 验证码类库
+thinkphp6 验证码类库（精简版）
 
 ## 安装
-> composer require topthink/think-captcha
+> composer require cccyun/think-captcha
 
 
 
