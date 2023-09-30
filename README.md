@@ -2,7 +2,7 @@
 thinkphp5.1 验证码类库（精简版）
 
 ## 安装
-> composer require topthink/think-captcha
+> composer require cccyun/think-captcha=2.0.*
 
 
 ##使用
