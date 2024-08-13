@@ -243,7 +243,7 @@ class Captcha
         if ($this->api) {
             return [
                 'code' => implode('', $text),
-                'img'  => 'data:image/png;base64,' . chunk_split(base64_encode($content)),
+                'img'  => 'data:image/png;base64,' . base64_encode($content),
             ];
         }
         // 输出验证码图片
