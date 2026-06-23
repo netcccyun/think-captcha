@@ -237,7 +237,10 @@ class Captcha
         // 输出图像
         imagepng($this->im);
         $content = ob_get_clean();
-        imagedestroy($this->im);
+        // PHP 8.0+ 中 imagedestroy 已无实际作用，8.5+ 已弃用
+        if (PHP_VERSION_ID < 80000) {
+            imagedestroy($this->im);
+        }
 
         // API调用模式
         if ($this->api) {
@@ -348,6 +351,9 @@ class Captcha
         // Resample
         $bgImage = @imagecreatefromjpeg($gb);
         @imagecopyresampled($this->im, $bgImage, 0, 0, 0, 0, $this->imageW, $this->imageH, $width, $height);
-        @imagedestroy($bgImage);
+        // PHP 8.0+ 中 imagedestroy 已无实际作用，8.5+ 已弃用
+        if (PHP_VERSION_ID < 80000) {
+            @imagedestroy($bgImage);
+        }
     }
 }
