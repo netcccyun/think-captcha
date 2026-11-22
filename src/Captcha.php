@@ -225,12 +225,20 @@ class Captcha
         // 绘验证码
         $text = $this->useZh ? preg_split('/(?<!^)(?!$)/u', $generator['value']) : str_split($generator['value']); // 验证码
 
-        foreach ($text as $index => $char) {
-            $x     = $this->fontSize * ($index + 1) * ($this->math ? 1 : 1.5);
-            $y     = $this->fontSize + mt_rand(10, 20);
-            $angle = $this->math ? 0 : mt_rand(-40, 40);
+        // PHP 8.6 且 GD 启用 --enable-gd-jis-conv 时，imagettftext() 对纯 ASCII 文本会抛出
+        // E_NOTICE "This is ASCII string."，ThinkPHP 会把 notice 转成异常导致验证码接口 500
+        $errorLevel = error_reporting();
+        error_reporting($errorLevel & ~E_NOTICE);
+        try {
+            foreach ($text as $index => $char) {
+                $x     = $this->fontSize * ($index + 1) * ($this->math ? 1 : 1.5);
+                $y     = $this->fontSize + mt_rand(10, 20);
+                $angle = $this->math ? 0 : mt_rand(-40, 40);
 
-            imagettftext($this->im, (int) $this->fontSize, $angle, (int) $x, (int) $y, $this->color, $fontttf, $char);
+                imagettftext($this->im, (int) $this->fontSize, $angle, (int) $x, (int) $y, $this->color, $fontttf, $char);
+            }
+        } finally {
+            error_reporting($errorLevel);
         }
 
         ob_start();
